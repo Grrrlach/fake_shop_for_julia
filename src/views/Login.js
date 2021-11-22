@@ -4,7 +4,7 @@ import {Formik, Form, Field} from 'formik';
 import Button from 'react-bootstrap/Button';
 import { Navigate } from 'react-router-dom';
 import axios from 'axios';
-import { render } from '@testing-library/react';
+// import { render } from '@testing-library/react';
 
 
 const formSchema = Yup.object().shape({
@@ -43,7 +43,8 @@ export default class Login extends Component {
             password: password
         })
         .then(response=>{
-            this.props.setToken(response.data.token)
+            this.props.setToken(response.data.token);
+            this.props.setName(username);
             return response;
 
         })

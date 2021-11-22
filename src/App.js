@@ -8,6 +8,7 @@ import Logout from './views/Logout';
 import Cart from './views/Cart';
 import ItemCard from './components/ItemCard';
 import {startRedirect} from './views/Login';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -19,7 +20,8 @@ export default class App extends Component {
     this.state={
       user:'',
       token:'',
-      cart:[]
+      cart:[],
+      userFullName:''
     };
   }
 
@@ -32,8 +34,27 @@ export default class App extends Component {
 
     this.setState({token:token}, ()=>{startRedirect(token)});
   }
+  setName = (username) =>{
+    let name = "";
+    axios.get('https://fakestoreapi.com/users')
+    .then(res=>{
+      for(let user of res.data){
+        if(user.username===username){
+          name = user.name.firstname+" "+user.name.lastname;
+          console.log(name);
+          this.setState({userFullName:name});
+          localStorage.setItem('name',name);
+          break;
+        }
+      }
+    })
+
+    // localStorage.setItem('name',name);
+
+    console.log(name);
+  }
   static getDerivedStateFromProps = (props,state)=>{
-    return {"token":localStorage.getItem('token')}
+    return {"token":localStorage.getItem('token'),"name":localStorage.getItem('name')}
   }
 
   addToUserCart = (item) =>{
@@ -46,7 +67,7 @@ export default class App extends Component {
   render() {
     return (
       <div>
-        <NavBar token={this.state.token}/>
+        <NavBar token={this.state.token} userFullName={this.state.userFullName}/>
         {/* {"my token: "+this.state.token} */}
 
         <Routes>
@@ -67,7 +88,7 @@ export default class App extends Component {
           }/>
 
           <Route path = '/login' element={
-            <Login setToken={this.setToken} token={this.state.token}/>
+            <Login setToken={this.setToken} token={this.state.token} setName={this.setName}/>
           }/>
         </Routes>
       </div>

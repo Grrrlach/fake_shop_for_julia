@@ -9,12 +9,14 @@ class NavBar extends Component {
             <div>
                 <Navbar bg="dark" variant="dark" expand="lg">
                     <Container>
-                        <Navbar.Brand as={Link} to="/">shAmazon.com</Navbar.Brand>
+                        <Navbar.Brand as={Link} to="/">scAmazon.com</Navbar.Brand>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
                         {this.props.token ?
                             <>
+                            <p style={{color:"azure"}}><b>{this.props.userFullName ? this.props.userFullName : localStorage.getItem('name')}</b></p>
+
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
                             <Nav.Link as={Link} to="/cart">Cart</Nav.Link>
                             <Nav.Link as={Link} to="/logout">Logout</Nav.Link>
