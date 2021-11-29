@@ -34,7 +34,7 @@ class CreateItem extends Component {
     }
 
     handleSubmit=({title, price, description, imageURL, category})=>{
-        axios.put(`https://fakestoreapi.com/products`, {
+        axios.post(`https://fakestoreapi.com/products`, {
             title:title,
             price:price,
             description:description,

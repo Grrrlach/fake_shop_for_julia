@@ -127,6 +127,10 @@ class Home extends Component {
                                 </li>
                             )}
 
+                            <li>
+                                <a href="/createitem"><Button  style={{margin:"5px 0px", color:"azure"}} variant="info" >Create New Item</Button></a>
+
+                            </li>
                         </ul>
                     </Col>
                     <Col md={9}>
