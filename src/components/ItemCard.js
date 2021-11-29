@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { Card, Col, Button } from 'react-bootstrap';
-// import {tellAppToAddToCart} from '../views/Home';
 
 export default class ItemCard extends Component {
 
     constructor() {
         super();
         this.state={
-            clicked:false
+            clicked:false,
+            redirect:false
+
         };
     }
 
@@ -21,6 +22,8 @@ export default class ItemCard extends Component {
 
     render() {
         return (
+            <>
+
             <Col>
             {/* come back for single item */}
                 <Card style={{ width: '150px', marginBottom:"25px" }}>
@@ -37,11 +40,21 @@ export default class ItemCard extends Component {
 
                     <Card.Subtitle className="float-end">${this.props.item.price ?? '?.??'} </Card.Subtitle>
                     <br/>
-                    <button style={{backgroundColor:"white", border:'none', color:'blue'}} onClick={()=>this.handleRenderItem()}>See More</button>
-                    <Button variant="success" onClick={()=>this.handleAddToCart(this.props.item)} >Add To Cart</Button>
+                    <div>
+                    <button  style={{margin:"5px 0px"}} style={{backgroundColor:"white", border:'none', color:'blue'}} onClick={()=>this.handleRenderItem()}>See More</button>
+                    <Button  style={{margin:"5px 0px"}} variant="success" onClick={()=>this.handleAddToCart(this.props.item)} >Add To Cart</Button>
+                    {this.props.isAdmin ?
+                    <>
+                    <Button  style={{margin:"5px 0px"}} variant="warning" onClick={()=>this.props.goToEditItem(this.props.item)} >Edit Item</Button>
+                    <Button  style={{margin:"5px 0px"}} variant="danger" onClick={()=>this.props.deleteItem(this.props.item.id)} >Delete Item</Button>
+                    </>
+                    :''}
+                    </div>
                 </Card.Body>
                 </Card>
             </Col>
+            
+            </>
         )
     }
 }

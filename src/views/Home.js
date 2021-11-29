@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Col, Row, Button} from 'react-bootstrap'
 import ItemCard from '../components/ItemCard'
+import { Navigate } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -14,7 +15,9 @@ class Home extends Component {
             categories:[],
             items:[],
             itemStart: 0,
-            itemEnd:15
+            itemEnd:15,
+            itemToEdit:{},
+            redirect:false
         };
     };
 
@@ -70,6 +73,20 @@ class Home extends Component {
         this.setState({itemStart:oldStart+15, itemEnd:oldEnd+15});
     }
 
+    goToEditItem = (item) => {
+        this.setState({itemToEdit:item}, ()=>(
+        localStorage.setItem('itemToEdit', JSON.stringify(item))
+        ))
+        this.setState({redirect:true});
+    }
+
+    deleteItem = (id) => {
+        axios.delete(`https://fakestoreapi.com/products/${id}`)
+        .then(res=>res.data)
+        .then(json=>console.log(json))
+        .then(()=>console.log(`Item number ${id} deleted.`))
+    }
+
     render() {
         const styles = {
             catButton:{
@@ -82,7 +99,8 @@ class Home extends Component {
             },
             pageStyles:{
                 backgroundColor: "grey",
-                padding:"20px"
+                padding:"20px",
+                minHeight:"94vh"
             },
             headerStyles:{
                 color:"azure"
@@ -91,6 +109,8 @@ class Home extends Component {
 
         return (
             <div style={styles.pageStyles}>
+            {this.state.redirect ? <Navigate to={{pathname:"/edititem", props:{item:this.state.itemToEdit}}}/> :
+
                 <Row>
                     <Col md={3}>
                         {/* category section */}
@@ -113,7 +133,7 @@ class Home extends Component {
                         {/* item section */}
                         <Row>
                             {this.state.items.slice(this.state.itemStart,this.state.itemEnd)
-                                .map((i)=><ItemCard item={i} key={i.id} addToUserCart={this.props.addToUserCart}/>)}
+                                .map((i)=><ItemCard item={i} key={i.id} addToUserCart={this.props.addToUserCart} goToEditItem={this.goToEditItem} deleteItem={this.deleteItem} isAdmin={this.props.isAdmin}/>)}
                         </Row>
                         <div className="d-flex justify-content-center">
                             <Button variant="danger" className={"me-2 " + (this.state.itemStart===0?"disabled":'')} onClick={()=>this.handlePrev()}>{"<< Prev"}</Button>
@@ -122,6 +142,7 @@ class Home extends Component {
                     </Col>
 
                 </Row>
+            }
             </div>
         );
     }

@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import {Routes, Route} from 'react-router-dom';
 import Home from './views/Home';
 import ProtectedRoute from './components/ProtectedRoute';
+import AdminRoute from './components/AdminRoute';
 import NavBar from './components/NavBar';
 import Login from './views/Login';
 import Logout from './views/Logout';
 import Cart from './views/Cart';
-import ItemCard from './components/ItemCard';
-import {startRedirect} from './views/Login';
+import CreateItem from './views/CreateItem';
+import EditItem from './views/EditItem';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {titleCase} from './helpers';
 
 
 
@@ -21,7 +23,10 @@ export default class App extends Component {
       user:'',
       token:'',
       cart:[],
-      userFullName:''
+      cartTotal:0,
+      userFullName:'',
+      itemToEdit:{},
+      isAdmin: true
     };
   }
 
@@ -32,7 +37,7 @@ export default class App extends Component {
   setToken = (token) =>{
     localStorage.setItem('token',token);
 
-    this.setState({token:token}, ()=>{startRedirect(token)});
+    this.setState({token:token});
   }
   setName = (username) =>{
     let name = "";
@@ -42,16 +47,12 @@ export default class App extends Component {
         if(user.username===username){
           name = user.name.firstname+" "+user.name.lastname;
           console.log(name);
-          this.setState({userFullName:name});
-          localStorage.setItem('name',name);
+          this.setState({userFullName:titleCase(name)});
+          localStorage.setItem('name',titleCase(name));
           break;
         }
       }
     })
-
-    // localStorage.setItem('name',name);
-
-    console.log(name);
   }
   static getDerivedStateFromProps = (props,state)=>{
     return {"token":localStorage.getItem('token'),"name":localStorage.getItem('name')}
@@ -59,10 +60,17 @@ export default class App extends Component {
 
   addToUserCart = (item) =>{
     let cart = this.state.cart;
+    let cartTotal = this.state.cartTotal;
     cart.push(item);
-    // localStorage.setItem('cart',cart);
-    this.setState({cart:cart}, ()=>console.log("cart updated."))
+    cartTotal+=parseFloat(item.price);
+    this.setState({cart:cart, cartTotal:cartTotal}, ()=>console.log("cart updated."))
   }
+
+  setItemToEdit = (item) => {
+
+  }
+
+
 
   render() {
     return (
@@ -73,13 +81,23 @@ export default class App extends Component {
         <Routes>
           <Route path = '/' element={
             <ProtectedRoute token={this.state.token}>
-              <Home token={this.state.token} setToken={this.setToken} addToUserCart={this.addToUserCart}/>
+              <Home token={this.state.token} setToken={this.setToken} addToUserCart={this.addToUserCart} isAdmin={this.state.isAdmin}/>
             </ProtectedRoute>
           }/>
           <Route path = '/cart' element={
             <ProtectedRoute token={this.state.token}>
-              <Cart cart={this.state.cart}/>
+              <Cart cart={this.state.cart} cartTotal={this.state.cartTotal}/>
             </ProtectedRoute>
+          }/>          
+          <Route path = '/createitem' element={
+            <AdminRoute token={this.state.token} isAdmin={this.state.isAdmin}>
+              <CreateItem/>
+            </AdminRoute>
+          }/>
+          <Route path = '/edititem' element={
+            <AdminRoute token={this.state.token} isAdmin={this.state.isAdmin}>
+              <EditItem/>
+            </AdminRoute>
           }/>
           <Route path = '/logout' element={
             <ProtectedRoute token={this.state.token}>

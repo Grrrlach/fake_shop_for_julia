@@ -4,7 +4,6 @@ import {Formik, Form, Field} from 'formik';
 import Button from 'react-bootstrap/Button';
 import { Navigate } from 'react-router-dom';
 import axios from 'axios';
-// import { render } from '@testing-library/react';
 
 
 const formSchema = Yup.object().shape({
@@ -17,12 +16,6 @@ const initialValues = {
     username:'',
     password:''
 }
-
-export const startRedirect = (token) => {
-    return (<Navigate to={{pathname:"/", props:{token:token}}}/>)
-}
-
-
 
 export default class Login extends Component {
 
@@ -65,7 +58,7 @@ export default class Login extends Component {
             pageStyles:{
                 backgroundColor: "grey",
                 padding:"80px",
-                paddingBottom:"54vh"
+                minHeight:"94vh"
             },
             formHead:{
                 color: "azure",
