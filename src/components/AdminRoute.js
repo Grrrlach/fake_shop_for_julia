@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Navigate } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
 
 export default class AdminRoute extends Component {
@@ -7,7 +7,7 @@ export default class AdminRoute extends Component {
     return this.props.isAdmin ? (
       <ProtectedRoute {...this.props} />
     ) : (
-      <Navigate
+      <Redirect
         to={{
           pathname: "/",
         }}

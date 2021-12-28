@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Col, Row, Button} from 'react-bootstrap'
 import ItemCard from '../components/ItemCard'
-import { Navigate } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -86,8 +86,9 @@ class Home extends Component {
         .then(json=>console.log(json))
         .then(()=>console.log(`Item number ${id} deleted.`))
     }
-
+   
     render() {
+        // console.log("Julia rocks")
         const styles = {
             catButton:{
                 backgroundColor: "white",
@@ -109,7 +110,7 @@ class Home extends Component {
 
         return (
             <div style={styles.pageStyles}>
-            {this.state.redirect ? <Navigate to={{pathname:"/edititem", props:{item:this.state.itemToEdit}}}/> :
+            {this.state.redirect ? <Redirect to={{pathname:"/edititem", props:{item:this.state.itemToEdit}}}/> :
 
                 <Row>
                     <Col md={3}>

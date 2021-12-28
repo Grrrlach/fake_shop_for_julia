@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 
 class Logout extends Component {
@@ -9,7 +9,7 @@ class Logout extends Component {
     render() {
         return (
             <div>
-                <Navigate to={{pathname : '/login'}} />
+                <Redirect to={{pathname : '/login'}} />
             </div>
         );
     }

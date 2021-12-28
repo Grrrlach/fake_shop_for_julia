@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 class Protectedroute extends Component {
     render() {
         return this.props.token ?(
             this.props.children
         ):(
-            <Navigate to={{pathname:"/login"}} />
+            <Redirect to={{pathname:"/login"}} />
         );
     }
 }

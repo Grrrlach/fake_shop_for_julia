@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Routes, Route} from 'react-router-dom';
+import {Switch, Route, Redirect} from 'react-router-dom';
 import Home from './views/Home';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
@@ -78,7 +78,7 @@ export default class App extends Component {
         <NavBar token={this.state.token} userFullName={this.state.userFullName}/>
         {/* {"my token: "+this.state.token} */}
 
-        <Routes>
+        <Switch>
           <Route path = '/' element={
             <ProtectedRoute token={this.state.token}>
               <Home token={this.state.token} setToken={this.setToken} addToUserCart={this.addToUserCart} isAdmin={this.state.isAdmin}/>
@@ -108,7 +108,7 @@ export default class App extends Component {
           <Route path = '/login' element={
             <Login setToken={this.setToken} token={this.state.token} setName={this.setName}/>
           }/>
-        </Routes>
+        </Switch>
       </div>
     );
   }

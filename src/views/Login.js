@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import * as Yup from 'yup';
 import {Formik, Form, Field} from 'formik';
 import Button from 'react-bootstrap/Button';
-import { Navigate } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -68,7 +68,7 @@ export default class Login extends Component {
         }
         return (
             <div style={styles.pageStyles}>
-                {this.state.redirect ? <Navigate to={{pathname:"/", props:{token:this.props.token}}}/> :''}
+                {this.state.redirect ? <Redirect to={{pathname:"/", props:{token:this.props.token}}}/> :''}
 
                 <center><h1 style={styles.formHead}>Login</h1></center>
                 <Formik initialValues={initialValues}
