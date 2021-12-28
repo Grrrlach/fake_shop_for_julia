@@ -55,10 +55,8 @@ export default class Login extends Component {
             formLabels:{
                 color: "azure"
             },
-            pageStyles:{
-                backgroundColor: "grey",
-                padding:"80px",
-                minHeight:"94vh"
+            stylePage:{
+                padding:"20px",
             },
             formHead:{
                 color: "azure",
@@ -67,7 +65,7 @@ export default class Login extends Component {
 
         }
         return (
-            <div style={styles.pageStyles}>
+            <div style={styles.stylePage}>
                 {this.state.redirect ? <Redirect to={{pathname:"/", props:{token:this.props.token}}}/> :''}
 
                 <center><h1 style={styles.formHead}>Login</h1></center>

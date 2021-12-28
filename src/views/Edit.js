@@ -46,10 +46,8 @@ class EditItem extends Component {
             formLabels:{
                 color: "azure"
             },
-            pageStyles:{
-                backgroundColor: "grey",
-                padding:"80px",
-                minHeight:"94vh"
+            stylePage:{
+                padding:"20px",
             },
             formHead:{
                 color: "azure",
@@ -59,7 +57,7 @@ class EditItem extends Component {
         }
         const item = JSON.parse(localStorage.getItem('itemToEdit'));
         return (
-            <div style={styles.pageStyles}>
+            <div style={styles.stylePage}>
                 
                 <center><h1 style={styles.formHead}>Edit Item</h1></center>
                 <Formik 

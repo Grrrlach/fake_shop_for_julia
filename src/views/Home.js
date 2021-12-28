@@ -14,66 +14,66 @@ class Home extends Component {
         this.state={
             categories:[],
             items:[],
-            itemStart: 0,
-            itemEnd:15,
+            startAt: 0,
+            endAt:6,
             itemToEdit:{},
             redirect:false
         };
     };
 
     componentDidMount() {
-        this.getAllCats();
-        this.getAllItems();
+        this.getCategories();
+        this.getItems();
     }
 
-    getAllCats = async () =>{
+    getCategories = async () =>{
         await axios.get('https://fakestoreapi.com/products/categories')
         .then(response=>{
-            this.setState({categories:response.data}, ()=>console.log("categories set."))
+            this.setState({categories:response.data})
         });
     }
 
-    getAllItems = async () =>{
+    getItems = async () =>{
         await axios.get('https://fakestoreapi.com/products')
         .then(response=>{
-            this.setState({items:response.data}, ()=>console.log("items set."))
+            this.setState({items:response.data})
         });
     }
 
     resetItemCounts = () =>{
-        this.setState({itemStart:0, itemEnd:15});
+        this.setState({startAt:0, endAt:6});
     }
 
-    handleCat = async (id) =>{
+    handleCategory = async (id) =>{
         this.resetItemCounts()
         if (id===-1){
-            return await this.getAllItems();
+            return await this.getItems();
         }
-        return await this.getCatsItems(id);
+        return await this.getCategoryItems(id);
         
     }
 
-    getCatsItems=async(id)=>{
-        let cat = this.state.categories[id];
-        await axios.get(`https://fakestoreapi.com/products/category/${cat}`)
+    getCategoryItems=async(id)=>{
+        let category = this.state.categories[id];
+        await axios.get(`https://fakestoreapi.com/products/category/${category}`)
         .then(response=>{
-            this.setState({items:response.data}, ()=>console.log("items set."))
+            this.setState({items:response.data})
         });
     }
 
     handlePrev=()=>{
-        const oldStart=this.state.itemStart;
-        const oldEnd=this.state.itemEnd;
-        this.setState({itemStart:oldStart-15, itemEnd:oldEnd-15});
+        const oldStart=this.state.startAt;
+        const oldEnd=this.state.endAt;
+        this.setState({startAt:oldStart-6, endAt:oldEnd-6});
     }
 
     handleNext=()=>{
-        const oldStart=this.state.itemStart;
-        const oldEnd=this.state.itemEnd;
-        this.setState({itemStart:oldStart+15, itemEnd:oldEnd+15});
+        const oldStart=this.state.startAt;
+        const oldEnd=this.state.endAt;
+        this.setState({startAt:oldStart+6, endAt:oldEnd+6});
     }
 
-    goToEditItem = (item) => {
+    goToEdit = (item) => {
         this.setState({itemToEdit:item}, ()=>(
         localStorage.setItem('itemToEdit', JSON.stringify(item))
         ))
@@ -83,66 +83,55 @@ class Home extends Component {
     deleteItem = (id) => {
         axios.delete(`https://fakestoreapi.com/products/${id}`)
         .then(res=>res.data)
-        .then(json=>console.log(json))
-        .then(()=>console.log(`Item number ${id} deleted.`))
     }
    
     render() {
         // console.log("Julia rocks")
         const styles = {
-            catButton:{
-                backgroundColor: "white",
+            category:{
                 color:"black",
-                width: '100%',
-                border: '1px solid grey',
-                borderRadius: '15px',
-                marginBottom:'5px'
+                border: '1px solid grey'
             },
-            pageStyles:{
-                backgroundColor: "grey",
-                padding:"20px",
-                minHeight:"94vh"
+            stylePage:{
+                padding:"20px"
+                // justify:"center"
             },
             headerStyles:{
-                color:"azure"
+                color:"red"
             }
         }
 
         return (
-            <div style={styles.pageStyles}>
-            {this.state.redirect ? <Redirect to={{pathname:"/edititem", props:{item:this.state.itemToEdit}}}/> :
+            <div style={styles.stylePage}>
+            {this.state.redirect ? <Redirect to={{pathname:"/edit", props:{item:this.state.itemToEdit}}}/> :
 
                 <Row>
+                    {/* menu */}
                     <Col md={3}>
-                        {/* category section */}
-                        <center><h3 style={styles.headerStyles}>Product Categories</h3></center>
+                        <center><h3 style={styles.headerStyles}>Select from our products!</h3></center>
                         <hr/>
                         <ul style={{listStyleType:'none'}}>
-                            {/* Come back to here */}
-                            <li>
-                                <button style={styles.catButton} onClick={()=>this.handleCat(-1)}>All Items</button>
-                            </li>
                             {this.state.categories.map(
                                 (c)=><li key={this.state.categories.indexOf(c)}>
-                                    <button style={styles.catButton} onClick={()=>this.handleCat(this.state.categories.indexOf(c))}>{c}</button>
+                                    <button style={styles.category} onClick={()=>this.handleCategory(this.state.categories.indexOf(c))}>{c}</button>
                                 </li>
                             )}
 
                             <li>
-                                <a href="/createitem"><Button  style={{margin:"5px 0px", color:"azure"}} variant="info" >Create New Item</Button></a>
+                                <a href="/create"><Button  style={{margin:"5px 0px", backgroundColor:"red", color:"azure"}} variant="info" >Create New Item</Button></a>
 
                             </li>
                         </ul>
                     </Col>
                     <Col md={9}>
-                        {/* item section */}
+                        {/* item */}
                         <Row>
-                            {this.state.items.slice(this.state.itemStart,this.state.itemEnd)
-                                .map((i)=><ItemCard item={i} key={i.id} addToUserCart={this.props.addToUserCart} goToEditItem={this.goToEditItem} deleteItem={this.deleteItem} isAdmin={this.props.isAdmin}/>)}
+                            {this.state.items.slice(this.state.startAt,this.state.endAt)
+                                .map((i)=><ItemCard item={i} key={i.id} addToUserCart={this.props.addToUserCart} goToEdit={this.goToEdit} deleteItem={this.deleteItem} isAdmin={this.props.isAdmin}/>)}
                         </Row>
                         <div className="d-flex justify-content-center">
-                            <Button variant="danger" className={"me-2 " + (this.state.itemStart===0?"disabled":'')} onClick={()=>this.handlePrev()}>{"<< Prev"}</Button>
-                            <Button variant="success" className={" " + (this.state.items?.length<=this.state.itemEnd?"disabled":'')} onClick={()=>this.handleNext()}>{"Next >>"}</Button>
+                            <Button variant="info"  onClick={()=>this.handlePrev()}>{"<< Prev"}</Button>
+                            <Button variant="primary" onClick={()=>this.handleNext()}>{"Next >>"}</Button>
                         </div>
                     </Col>
 

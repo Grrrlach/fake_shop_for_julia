@@ -52,10 +52,8 @@ class CreateItem extends Component {
             formLabels:{
                 color: "azure"
             },
-            pageStyles:{
-                backgroundColor: "grey",
-                padding:"80px",
-                minHeight:"94vh"
+            stylePage:{
+                padding:"20px",
             },
             formHead:{
                 color: "azure",
@@ -64,7 +62,7 @@ class CreateItem extends Component {
 
         }
         return (
-            <div style={styles.pageStyles}>
+            <div style={styles.stylePage}>
 
                 <center><h1 style={styles.formHead}>Create Item</h1></center>
                 <Formik 

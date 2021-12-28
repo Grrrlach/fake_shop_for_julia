@@ -7,6 +7,7 @@ class Logout extends Component {
     componentDidMount(){this.props.setToken('')}
 
     render() {
+        console.log ("Logout render executed")
         return (
             <div>
                 <Redirect to={{pathname : '/login'}} />

@@ -13,53 +13,46 @@ class Cart extends Component {
 
     render() {
         const styles={
-            pageStyles:{
-                backgroundColor: "grey",
-                padding:"20px 80px",
-                minHeight:"94vh"
+            stylePage:{
+                padding:"20px",
             },
             formHead:{
-                color: "azure",
-                fontWeight:"bold"
+                color: "black",
             },
-            cartItemList:{
-                listStyleType:"none",
-                color: "azure"
+            cartList:{
+                color: "black"
             },
             itemImg:{
-                maxHeight:"100px", 
-                width:"130px", 
+                maxHeight:"200px", 
+                width:"150px", 
                 objectFit:"contain", 
-                marginTop:"10px", 
-                marginLeft:"10px", 
-                border:"solid",
-                borderRadius:"5px",
-                borderColor:"white",
-                backgroundColor: "white"
+                marginTop:"5%", 
+                marginLeft:"5%", 
+                border:"solid"
             },
             cartTotal:{
-                color: "azure"
+                color: "black"
             }
         };
 
         return (
-            <div style={styles.pageStyles}>
+            <div style={styles.stylePage}>
                 <center><h1 style={styles.formHead}>Cart</h1></center>
                 {this.props.cart?.length>0 ?
                 <>
                 <p style={styles.cartTotal}>Cart Total: <b>${this.props.cartTotal}</b></p>
-                <ul style={styles.cartItemList}>
+                <ul style={styles.cartList}>
                     {this.props.cart.map(item=>(
                         <li key={this.props.cart.indexOf(item)}>
                             {this.props.cart.indexOf(item)+1}. <b>{item.title.substring(0,40)}</b> <div style={{float:"right"}}><b>${item.price}</b></div>
-                            <br/> &nbsp;&nbsp;&nbsp;<img src={item.image} style={styles.itemImg} alt={item.title.substring(0,20)+"... image"}/>
-                            <br/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{item.category}
+                            <br/> <img src={item.image} style={styles.itemImg} alt={item.title.substring(0,20)+"... image"}/>
+                            <br/> <div>{item.category} </div>
                             <br/>
                         </li>
                     ))}
                 </ul>
                 </>
-                : "Shopping cart is empty"}
+                : "Your Cart is Empty"}
             </div>
         );
     }

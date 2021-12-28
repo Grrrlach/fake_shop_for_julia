@@ -22,39 +22,33 @@ export default class ItemCard extends Component {
 
     render() {
         return (
-            <>
 
-            <Col>
-            {/* come back for single item */}
-                <Card style={{ width: '150px', marginBottom:"25px" }}>
-                <Card.Img variant="top" style={{maxHeight:"100px", width:"130px", objectFit:"contain", marginTop:"10px", marginLeft:"10px"}} alt={this.props.item.title.substring(0,20)+"... image"}
-                    src={this.props.item.image ?? 'https://res.cloudinary.com/cae67/image/upload/v1629310111/fakebook_shop/no-image_nkau78.png' } />
+                <Card style={{ width: '150px'}}>
+                <Card.Img variant="top" alt={"product image goes here"}
+                    src={this.props.item.image ?? 'public\no_image_available.png' } />
                 <Card.Body>
                     <Card.Title>{this.props.item.title.substring(0,20)+"..." ?? "No name"}</Card.Title>
                     <Card.Subtitle style={{color:"blue", fontSize:"12px"}} className="float-start">- {this.props.item.category ?? 'No category'} </Card.Subtitle>
 
                     <br/>
                     <Card.Text>
-                    {this.props.item.description.substring(0,50)+"..." ?? "No Description"}
+                    {this.props.item.description.substring(0,50)+"..." ?? "Description not available"}
                     </Card.Text>
 
-                    <Card.Subtitle className="float-end">${this.props.item.price ?? '?.??'} </Card.Subtitle>
+                    <Card.Subtitle className="float-end">${this.props.item.price ?? 'Price not available'} </Card.Subtitle>
                     <br/>
                     <div>
-                    <button  style={{margin:"5px 0px"}} style={{backgroundColor:"white", border:'none', color:'blue'}} onClick={()=>this.handleRenderItem()}>See More</button>
-                    <Button  style={{margin:"5px 0px"}} variant="success" onClick={()=>this.handleAddToCart(this.props.item)} >Add To Cart</Button>
+                    <Button  style={{margin:"10px 10px"}} variant="success" onClick={()=>this.handleAddToCart(this.props.item)} >I want this!</Button>
                     {this.props.isAdmin ?
                     <>
-                    <Button  style={{margin:"5px 0px"}} variant="warning" onClick={()=>this.props.goToEditItem(this.props.item)} >Edit Item</Button>
-                    <Button  style={{margin:"5px 0px"}} variant="danger" onClick={()=>this.props.deleteItem(this.props.item.id)} >Delete Item</Button>
+                    <Button  style={{margin:"10px 10px"}} variant="warning" onClick={()=>this.props.goToEdit(this.props.item)} >Edit</Button>
+                    <Button  style={{margin:"10px 10px"}} variant="danger" onClick={()=>this.props.deleteItem(this.props.item.id)} >Delete</Button>
                     </>
                     :''}
                     </div>
                 </Card.Body>
                 </Card>
-            </Col>
             
-            </>
         )
     }
 }

@@ -7,8 +7,8 @@ import NavBar from './components/NavBar';
 import Login from './views/Login';
 import Logout from './views/Logout';
 import Cart from './views/Cart';
-import CreateItem from './views/CreateItem';
-import EditItem from './views/EditItem';
+import CreateItem from './views/Create';
+import EditItem from './views/Edit';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {titleCase} from './helpers';
@@ -20,7 +20,7 @@ export default class App extends Component {
   constructor(){
     super();
     this.state={
-      user:'',
+      username:'',
       token:'',
       cart:[],
       cartTotal:0,
@@ -30,8 +30,8 @@ export default class App extends Component {
     };
   }
 
-  setUser = (user) =>{
-    this.setState({user});
+  setUser = (username) =>{
+    this.setState({username});
   }
 
   setToken = (token) =>{
@@ -73,41 +73,51 @@ export default class App extends Component {
 
 
   render() {
+    let { token, cart, cartTotal } = this.state;
     return (
       <div>
-        <NavBar token={this.state.token} userFullName={this.state.userFullName}/>
-        {/* {"my token: "+this.state.token} */}
+        <NavBar token={token} userFullName={this.state.userFullName}/>
+        {/* {"my token: "+token} */}
+
+
 
         <Switch>
-          <Route path = '/' element={
-            <ProtectedRoute token={this.state.token}>
-              <Home token={this.state.token} setToken={this.setToken} addToUserCart={this.addToUserCart} isAdmin={this.state.isAdmin}/>
+
+
+          <Route path = '/cart'>
+            <ProtectedRoute token={token}>
+              <Cart cart={cart} cartTotal={cartTotal}/>
             </ProtectedRoute>
-          }/>
-          <Route path = '/cart' element={
-            <ProtectedRoute token={this.state.token}>
-              <Cart cart={this.state.cart} cartTotal={this.state.cartTotal}/>
-            </ProtectedRoute>
-          }/>          
-          <Route path = '/createitem' element={
-            <AdminRoute token={this.state.token} isAdmin={this.state.isAdmin}>
+          </Route>
+
+          <Route path = '/create'>
+            <AdminRoute token={token} isAdmin={this.state.isAdmin}>
               <CreateItem/>
             </AdminRoute>
-          }/>
-          <Route path = '/edititem' element={
-            <AdminRoute token={this.state.token} isAdmin={this.state.isAdmin}>
-              <EditItem/>
-            </AdminRoute>
-          }/>
-          <Route path = '/logout' element={
-            <ProtectedRoute token={this.state.token}>
-              <Logout setToken={this.setToken}/>
-            </ProtectedRoute>
-          }/>
+          </Route>
 
-          <Route path = '/login' element={
-            <Login setToken={this.setToken} token={this.state.token} setName={this.setName}/>
-          }/>
+          <Route path = '/edit'>
+            <AdminRoute token={token} isAdmin={this.state.isAdmin}>
+            <EditItem/>
+          </AdminRoute>
+          </Route>
+
+          <Route path = '/logout'>
+            <ProtectedRoute token={token}>
+              <Logout setToken={this.setToken} token={token}/>
+            </ProtectedRoute>
+          </Route>
+
+          <Route path = '/login'>
+            <Login setToken={this.setToken} token={token} setName={this.setName}/>
+          </Route>
+
+          <Route path = '/'>
+            <ProtectedRoute token={token}>
+              <Home token={token} setToken={this.setToken} addToUserCart={this.addToUserCart} isAdmin={this.state.isAdmin}/>
+            </ProtectedRoute>
+          </Route>
+          
         </Switch>
       </div>
     );

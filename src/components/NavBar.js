@@ -18,7 +18,7 @@ class NavBar extends Component {
                             <p style={{color:"azure"}}><b>{this.props.userFullName ? this.props.userFullName : localStorage.getItem('name')}</b></p>
 
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
-                            <Nav.Link as={Link} to="/cart">Cart</Nav.Link>
+                            <Nav.Link as={Link} to="/cart">My Cart</Nav.Link>
                             <Nav.Link as={Link} to="/logout">Logout</Nav.Link>
                             </>
                             :
